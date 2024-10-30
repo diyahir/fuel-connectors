@@ -34,3 +34,4 @@ yarn-error.log*
 **/*.tgz
 packages/evm-connector/src/test/predicate-addresses.json
 generated/predicate-addresses.json
+scripts/data/**
