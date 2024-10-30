@@ -32,3 +32,5 @@ yarn-error.log*
 .env
 /e2e-tests/test-results
 **/*.tgz
+packages/evm-connector/src/test/predicate-addresses.json
+generated/predicate-addresses.json

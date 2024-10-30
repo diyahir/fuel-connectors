@@ -24,7 +24,8 @@
     "changeset": "changeset",
     "changeset:next": "tsx ./scripts/changeset-next",
     "packages:version": "node ./scripts/version.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate-predicate-addresses": "tsx scripts/generatePredicateAddresses.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
@@ -53,5 +54,9 @@
       "fast-xml-parser@<4.4.1": ">=4.4.1"
     }
   },
-  "packageManager": "pnpm@9.5.0"
+  "packageManager": "pnpm@9.5.0",
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }
