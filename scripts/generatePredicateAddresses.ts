@@ -7,28 +7,46 @@ import {
   type PredicateConfig,
 } from '../packages/common';
 import { PredicateFactory } from '../packages/common';
-import { MockProvider } from '../packages/evm-connector/src/test/mockProvider';
 
 import {
-  abi as predicateAbi,
-  bin as predicateBin,
-  generationDate as predicateGenerationDate,
-} from '../packages/evm-connector/src/generated/predicates/0xfdac03fc617c264fa6f325fd6f4d2a5470bf44cfbd33bc11efb3bf8b7ee2e938';
+  abi as predicateAbiTestnet,
+  bin as predicateBinTestnet,
+  generationDate as predicateGenerationDateTestnet,
+} from '../packages/evm-predicates/src/generated/predicates/0xfdac03fc617c264fa6f325fd6f4d2a5470bf44cfbd33bc11efb3bf8b7ee2e938';
+
+import {
+  abi as predicateAbiMainnet,
+  bin as predicateBinMainnet,
+  generationDate as predicateGenerationDateMainnet,
+} from '../packages/evm-predicates/src/generated/predicates/0xbbae06500cd11e6c1d024ac587198cb30c504bf14ba16548f19e21fa9e8f5f95';
 
 // Define the predicate versions
 const PREDICATE_VERSIONS = {
-  '0xfdac03fc617c264fa6f325fd6f4d2a5470bf44cfbd33bc11efb3bf8b7ee2e938': {
+  testnet: {
+    id: '0xfdac03fc617c264fa6f325fd6f4d2a5470bf44cfbd33bc11efb3bf8b7ee2e938',
     predicate: {
-      abi: predicateAbi,
-      bin: predicateBin,
+      abi: predicateAbiTestnet,
+      bin: predicateBinTestnet,
     },
-    generatedAt: predicateGenerationDate,
+    generatedAt: predicateGenerationDateTestnet,
+  },
+  mainnet: {
+    id: '0xbbae06500cd11e6c1d024ac587198cb30c504bf14ba16548f19e21fa9e8f5f95',
+    predicate: {
+      abi: predicateAbiMainnet,
+      bin: predicateBinMainnet,
+    },
+    generatedAt: predicateGenerationDateMainnet,
   },
 };
 
+// Get network from command line argument, default to testnet
+const network =
+  process.argv[2]?.toLowerCase() === 'mainnet' ? 'mainnet' : 'testnet';
+
 // Hardcoded fallback addresses
 const hardcodedAddresses = [
-  '0x52d7792d70E15dC6eDDb8Dc907c06D3b8247aEbe',
+  '0x2bfe7Af51f337F814c70238fA7888314d1c3c927',
   // Add more addresses here
 ];
 
@@ -69,21 +87,20 @@ interface AddressMapping {
 }
 
 async function generatePredicateAddresses() {
-  // Create mock provider instance
-  const _mockProvider = new MockProvider();
+  const selectedPredicate = PREDICATE_VERSIONS[network]
+    .predicate as PredicateConfig;
 
   const results = evmAddresses.map((evmAddress: string) => {
-    const predicate = Object.values(PREDICATE_VERSIONS)[0]
-      ?.predicate as PredicateConfig;
     const predicateFactory = new PredicateFactory(
       new EthereumWalletAdapter(),
-      predicate,
+      selectedPredicate,
       '',
     );
     const predicateAddress = predicateFactory.getPredicateAddress(evmAddress);
     return {
       evmAddress,
       predicateAddress,
+      network,
     };
   });
 

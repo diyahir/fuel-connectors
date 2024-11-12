@@ -25,7 +25,8 @@
     "changeset:next": "tsx ./scripts/changeset-next",
     "packages:version": "node ./scripts/version.js",
     "prepare": "husky",
-    "generate-predicate-addresses": "tsx scripts/generatePredicateAddresses.ts"
+    "generate-predicate-addresses:testnet": "tsx scripts/generatePredicateAddresses.ts testnet",
+    "generate-predicate-addresses:mainnet": "tsx scripts/generatePredicateAddresses.ts mainnet"
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
